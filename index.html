@@ -107,7 +107,6 @@
             color: var(--hint-color);
         }
 
-        /* Итоги и форма */
         .summary-box {
             background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--border-color);
@@ -190,9 +189,8 @@
         <h1 id="main-title">🚀 Калькулятор IT-проекта</h1>
         <button class="lang-switcher" onclick="toggleLanguage()">🌐 <span id="lang-label">RU</span></button>
     </div>
-    <div class="subtitle" id="subtitle-text">Соберите конфигурацию под ваш бюджет и получите аудит воронки в подарок</div>
+    <div class="subtitle" id="subtitle-text">Соберите конфигурацию под ваш бюджет (РФ, СНГ, США) и получите аудит воронки в подарок</div>
 
-    <!-- Шаг 1 -->
     <div class="section-title" id="step-1-title">1. Выберите основу проекта:</div>
     <div class="options-grid">
         <div class="option-card selected" onclick="selectService(this, 'Telegram Bot / Mini App', 15000, 200)">
@@ -209,7 +207,6 @@
         </div>
     </div>
 
-    <!-- Шаг 2 -->
     <div class="section-title" id="step-2-title">2. Срочность и масштаб:</div>
     <div class="options-grid">
         <div class="option-card selected" onclick="selectLevel(this, 'Standard MVP', 0, 0)">
@@ -222,7 +219,6 @@
         </div>
     </div>
 
-    <!-- Итоги и форма -->
     <div class="summary-box">
         <div class="summary-row">
             <span id="summary-service-label">Решение:</span>
@@ -246,7 +242,7 @@
     <button class="btn" id="submitBtn" onclick="submitOrder()">🚀 Отправить расчет и забрать аудит</button>
 
     <div class="footer">
-        ⚡️ Точная смена фиксируется после ТЗ
+        ⚡️ Точная смета фиксируется после ТЗ
     </div>
 
     <script>
@@ -260,7 +256,7 @@
         const uiText = {
             en: {
                 title: "🚀 IT Project Calculator",
-                subtitle: "Configure your solution and get a free funnel audit",
+                subtitle: "Configure your solution (Russia, CIS, USA) and get a free funnel audit",
                 step1: "1. Choose core solution:",
                 step2: "2. Scope & Timeline:",
                 summaryService: "Solution:",
@@ -271,7 +267,7 @@
             },
             ru: {
                 title: "🚀 Калькулятор IT-проекта",
-                subtitle: "Соберите конфигурацию под ваш бюджет и получите аудит воронки",
+                subtitle: "Соберите конфигурацию под ваш бюджет (РФ, СНГ, США) и получите аудит воронки",
                 step1: "1. Выберите основу проекта:",
                 step2: "2. Срочность и масштаб:",
                 summaryService: "Решение:",
@@ -367,7 +363,9 @@
                 contact: contact
             };
 
+            // Отправляем данные и закрываем WebApp
             tg.sendData(JSON.stringify(orderData));
+            tg.close();
         }
 
         window.onload = function() {
