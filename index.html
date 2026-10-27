@@ -104,8 +104,8 @@
 
     <script>
         // ====== НАСТРОЙКИ ======
-        // Ваш Telegram username БЕЗ @ (запасной вариант, если Mini App открыт не через кнопку клавиатуры)
-        const DEV_USERNAME = "ВАШ_USERNAME";
+        // Ваш Telegram username БЕЗ @ (нужен как запасной вариант, если Mini App открыт не через кнопку клавиатуры)
+        const DEV_USERNAME = "andrey_digita_ai";
         // =======================
 
         const tg = window.Telegram.WebApp;
@@ -169,6 +169,7 @@
             }
         };
 
+        // Язык по умолчанию: русский для RU/СНГ, иначе английский
         const tgLang = (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.language_code) || "ru";
         let currentLang = ["ru", "uk", "be", "kk"].includes(tgLang) ? "ru" : "en";
         let serviceKey = "bot";
@@ -237,7 +238,8 @@
                 contact: contact
             };
 
-            // При открытии через inline-кнопку или меню sendData() молча не работает.
+            // Если окно открыто через inline-кнопку или меню, у Telegram есть query_id,
+            // и sendData() в этом случае молча не работает. Тогда используем запасной вариант.
             const openedViaInline = tg.initDataUnsafe && tg.initDataUnsafe.query_id;
 
             if (openedViaInline) {
