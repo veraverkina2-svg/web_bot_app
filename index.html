@@ -12,9 +12,9 @@
             --hint-color: var(--tg-theme-hint-color, #94a3b8);
             --button-color: var(--tg-theme-button-color, #3b82f6);
             --button-text-color: var(--tg-theme-button-text-color, #ffffff);
-            --card-bg: rgba(30, 41, 59, 0.6);
-            --border-color: rgba(59, 130, 246, 0.2);
-            --accent-glow: rgba(59, 130, 246, 0.15);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(59, 130, 246, 0.25);
+            --accent-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
         }
 
         * {
@@ -28,18 +28,18 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 16px;
-            padding-bottom: 60px;
+            padding-bottom: 70px;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         h1 {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             background: linear-gradient(90deg, #60a5fa, #3b82f6);
             -webkit-background-clip: text;
@@ -57,11 +57,17 @@
             font-weight: 600;
         }
 
-        /* Шаги калькулятора */
-        .step-title {
-            font-size: 15px;
+        .subtitle {
+            font-size: 13px;
+            color: var(--hint-color);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .section-title {
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: #93c5fd;
         }
 
@@ -69,14 +75,14 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .option-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 14px;
+            padding: 12px 14px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
@@ -87,59 +93,59 @@
 
         .option-card.selected {
             border: 2px solid var(--button-color);
-            background: var(--accent-glow);
+            background: rgba(59, 130, 246, 0.15);
         }
 
         .opt-title {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .opt-desc {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--hint-color);
         }
 
-        /* Блок итогов и контактов */
+        /* Итоги и форма */
         .summary-box {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.9);
             border: 1px solid var(--border-color);
             border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 20px;
+            padding: 14px;
+            margin-bottom: 16px;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 8px;
+            font-size: 13px;
+            margin-bottom: 6px;
         }
 
         .summary-row.total {
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
             color: #60a5fa;
             border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 8px;
-            margin-top: 8px;
+            padding-top: 6px;
+            margin-top: 6px;
         }
 
         .form-group {
-            margin-top: 12px;
+            margin-top: 10px;
         }
 
         .form-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--hint-color);
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px;
+            padding: 10px 12px;
             background: #0f172a;
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -153,7 +159,7 @@
         }
 
         .btn {
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            background: var(--accent-gradient);
             color: var(--button-text-color);
             border: none;
             width: 100%;
@@ -164,7 +170,6 @@
             cursor: pointer;
             text-align: center;
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-            transition: opacity 0.2s;
         }
 
         .btn:active {
@@ -175,56 +180,57 @@
             text-align: center;
             font-size: 11px;
             color: var(--hint-color);
-            margin-top: 24px;
+            margin-top: 16px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 id="main-title">🚀 Калькулятор IT-решений</h1>
+        <h1 id="main-title">🚀 Калькулятор IT-проекта</h1>
         <button class="lang-switcher" onclick="toggleLanguage()">🌐 <span id="lang-label">RU</span></button>
     </div>
+    <div class="subtitle" id="subtitle-text">Соберите конфигурацию под ваш бюджет и получите аудит воронки в подарок</div>
 
-    <!-- Шаг 1: Выбор направления -->
-    <div class="step-title" id="step-1-title">1. Что вам необходимо создать?</div>
+    <!-- Шаг 1 -->
+    <div class="section-title" id="step-1-title">1. Выберите основу проекта:</div>
     <div class="options-grid">
-        <div class="option-card selected" onclick="selectService(this, 'Telegram Bot', 45000, 500)">
-            <div class="opt-title" data-en="Telegram Bot / Mini App" data-ru="Telegram-бот или Mini App">Telegram-бот или Mini App</div>
-            <div class="opt-desc" data-en="Automation, funnels, web apps inside TG" data-ru="Автоматизация, воронки, веб-приложения внутри Telegram">Автоматизация, воронки, веб-приложения внутри Telegram</div>
+        <div class="option-card selected" onclick="selectService(this, 'Telegram Bot / Mini App', 15000, 200)">
+            <div class="opt-title" data-en="Telegram Bot / Mini App" data-ru="Telegram-бот / Mini App">Telegram-бот / Mini App</div>
+            <div class="opt-desc" data-en="Automation & web apps inside TG" data-ru="Автоматизация, воронки, лид-захват">Автоматизация, воронки, лид-захват</div>
         </div>
-        <div class="option-card" onclick="selectService(this, 'Landing Page', 50000, 550)">
-            <div class="opt-title" data-en="High-Converting Website" data-ru="Продающий сайт / Лендинг">Продающий сайт / Лендинг</div>
-            <div class="opt-desc" data-en="Modern adaptive landing for traffic" data-ru="Современный адаптивный сайт под конверсию в заявки">Современный адаптивный сайт под конверсию в заявки</div>
+        <div class="option-card" onclick="selectService(this, 'Landing Page', 20000, 250)">
+            <div class="opt-title" data-en="Landing Page / Website" data-ru="Продающий сайт / Лендинг">Продающий сайт / Лендинг</div>
+            <div class="opt-desc" data-en="Adaptive design for conversion" data-ru="Адаптивный дизайн под конверсию в заявки">Адаптивный дизайн под конверсию в заявки</div>
         </div>
-        <div class="option-card" onclick="selectService(this, 'Full Ecosystem', 95000, 1050)">
-            <div class="opt-title" data-en="Full Ecosystem (Site + Bot)" data-ru="Комплекс: Сайт + Telegram-бот">Комплекс: Сайт + Telegram-бот</div>
-            <div class="opt-desc" data-en="Full turnkey package for business scaling" data-ru="Мощная связка под ключ для максимального потока лидов">Мощная связка под ключ для максимального потока лидов</div>
+        <div class="option-card" onclick="selectService(this, 'Full Ecosystem', 35000, 450)">
+            <div class="opt-title" data-en="Ecosystem (Site + Bot)" data-ru="Экосистема (Сайт + Бот)">Экосистема (Сайт + Бот)</div>
+            <div class="opt-desc" data-en="Full turnkey package" data-ru="Мощная связка под ключ для бизнеса">Мощная связка под ключ для бизнеса</div>
         </div>
     </div>
 
-    <!-- Шаг 2: Сложность / Дизайн -->
-    <div class="step-title" id="step-2-title">2. Уровень реализации и дизайна</div>
+    <!-- Шаг 2 -->
+    <div class="section-title" id="step-2-title">2. Срочность и масштаб:</div>
     <div class="options-grid">
-        <div class="option-card selected" onclick="selectComplexity(this, 'Standard', 0, 0)">
-            <div class="opt-title" data-en="Standard UI / Fast Launch" data-ru="Стандарт / Быстрый запуск">Стандарт / Быстрый запуск</div>
-            <div class="opt-desc" data-en="Clean UI, standard logic, ready in 2-3 days" data-ru="Чистый интерфейс, стандартная логика, готово за 2-3 дня">Чистый интерфейс, стандартная логика, готово за 2-3 дня</div>
+        <div class="option-card selected" onclick="selectLevel(this, 'Standard MVP', 0, 0)">
+            <div class="opt-title" data-en="Standard MVP (Fast launch)" data-ru="Стандарт MVP (Быстрый запуск)">Стандарт MVP (Быстрый запуск)</div>
+            <div class="opt-desc" data-en="Ready in 2-3 days" data-ru="Базовый функционал, запуск за 2-3 дня">Базовый функционал, запуск за 2-3 дня</div>
         </div>
-        <div class="option-card" onclick="selectComplexity(this, 'Premium / AI', 35000, 400)">
-            <div class="opt-title" data-en="Premium custom design + AI" data-ru="Премиум-дизайн + AI интеграции">Премиум-дизайн + AI интеграции</div>
-            <div class="opt-desc" data-en="Unique visual, animations, AI workflow" data-ru="Уникальный визуальный стиль, анимации, нейросети">Уникальный визуальный стиль, анимации, нейросети</div>
+        <div class="option-card" onclick="selectLevel(this, 'Custom + AI Integration', 15000, 150)">
+            <div class="opt-title" data-en="Custom UI + AI Workflows" data-ru="Премиум дизайн + AI интеграции">Премиум дизайн + AI интеграции</div>
+            <div class="opt-desc" data-en="Advanced features & AI agents" data-ru="Уникальный стиль, ИИ-агенты, анимации">Уникальный стиль, ИИ-агенты, анимации</div>
         </div>
     </div>
 
-    <!-- Итоги и форма ввода -->
+    <!-- Итоги и форма -->
     <div class="summary-box">
         <div class="summary-row">
-            <span id="summary-service-label">Выбранное решение:</span>
-            <strong id="selectedServiceName">Telegram-бот или Mini App</strong>
+            <span id="summary-service-label">Решение:</span>
+            <strong id="selectedServiceName">Telegram-бот / Mini App</strong>
         </div>
         <div class="summary-row total">
-            <span id="summary-total-label">Ориентировочная оценка:</span>
-            <span id="totalPrice">от 45 000 ₽</span>
+            <span id="summary-total-label">Инвестиции:</span>
+            <span id="totalPrice">от 15 000 ₽</span>
         </div>
 
         <div class="form-group">
@@ -232,15 +238,15 @@
             <input type="text" id="clientName" placeholder="Например, Алексей" autocomplete="off">
         </div>
         <div class="form-group">
-            <label id="label-contact">Телефон или Telegram для связи:</label>
+            <label id="label-contact">Телефон или Telegram:</label>
             <input type="text" id="clientContact" placeholder="+7 999 000-00-00 / @username" autocomplete="off">
         </div>
     </div>
 
-    <button class="btn" id="submitBtn" onclick="submitOrder()">🚀 Зафиксировать смету и забрать бонус</button>
+    <button class="btn" id="submitBtn" onclick="submitOrder()">🚀 Отправить расчет и забрать аудит</button>
 
     <div class="footer">
-        🔥 В подарок: бесплатный аудит воронки продаж и ТЗ
+        ⚡️ Точная смена фиксируется после ТЗ
     </div>
 
     <script>
@@ -248,35 +254,31 @@
         tg.expand();
 
         let currentLang = 'ru';
-        
-        // Данные текущего расчета
-        let currentService = { nameRu: "Telegram-бот или Mini App", nameEn: "Telegram Bot / Mini App", baseRub: 45000, baseUsd: 500 };
-        let currentComplexity = { nameRu: "Стандарт / Быстрый запуск", nameEn: "Standard UI", addRub: 0, addUsd: 0 };
+        let currentService = { nameRu: "Telegram-бот / Mini App", nameEn: "Telegram Bot / Mini App", baseRub: 15000, baseUsd: 200 };
+        let currentLevel = { nameRu: "Стандарт MVP", nameEn: "Standard MVP", addRub: 0, addUsd: 0 };
 
         const uiText = {
             en: {
-                title: "🚀 IT Solutions Calculator",
-                step1: "1. What do you need to build?",
-                step2: "2. Complexity & Design Level",
-                summaryService: "Selected solution:",
-                summaryTotal: "Estimated investment:",
+                title: "🚀 IT Project Calculator",
+                subtitle: "Configure your solution and get a free funnel audit",
+                step1: "1. Choose core solution:",
+                step2: "2. Scope & Timeline:",
+                summaryService: "Solution:",
+                summaryTotal: "Investment:",
                 labelName: "Your Name:",
                 labelContact: "Phone or Telegram handle:",
-                placeholderName: "e.g., Alex",
-                placeholderContact: "+1 234 567-8900 / @username",
-                submitBtn: "🚀 Lock estimate & claim bonus"
+                submitBtn: "🚀 Send estimate & claim bonus"
             },
             ru: {
-                title: "🚀 Калькулятор IT-решений",
-                step1: "1. Что вам необходимо создать?",
-                step2: "2. Уровень реализации и дизайна",
-                summaryService: "Выбранное решение:",
-                summaryTotal: "Ориентировочная оценка:",
+                title: "🚀 Калькулятор IT-проекта",
+                subtitle: "Соберите конфигурацию под ваш бюджет и получите аудит воронки",
+                step1: "1. Выберите основу проекта:",
+                step2: "2. Срочность и масштаб:",
+                summaryService: "Решение:",
+                summaryTotal: "Инвестиции:",
                 labelName: "Ваше имя:",
-                labelContact: "Телефон или Telegram для связи:",
-                placeholderName: "Например, Алексей",
-                placeholderContact: "+7 999 000-00-00 / @username",
-                submitBtn: "🚀 Зафиксировать смету и забрать бонус"
+                labelContact: "Телефон или Telegram:",
+                submitBtn: "🚀 Отправить расчет и забрать аудит"
             }
         };
 
@@ -285,17 +287,15 @@
             document.getElementById('lang-label').innerText = currentLang.toUpperCase();
             
             document.getElementById('main-title').innerText = uiText[currentLang].title;
+            document.getElementById('subtitle-text').innerText = uiText[currentLang].subtitle;
             document.getElementById('step-1-title').innerText = uiText[currentLang].step1;
             document.getElementById('step-2-title').innerText = uiText[currentLang].step2;
             document.getElementById('summary-service-label').innerText = uiText[currentLang].summaryService;
             document.getElementById('summary-total-label').innerText = uiText[currentLang].summaryTotal;
             document.getElementById('label-name').innerText = uiText[currentLang].labelName;
             document.getElementById('label-contact').innerText = uiText[currentLang].labelContact;
-            document.getElementById('clientName').placeholder = uiText[currentLang].placeholderName;
-            document.getElementById('clientContact').placeholder = uiText[currentLang].placeholderContact;
             document.getElementById('submitBtn').innerText = uiText[currentLang].submitBtn;
 
-            // Перевод карточек
             document.querySelectorAll('.option-card').forEach(card => {
                 const titleEl = card.querySelector('.opt-title');
                 const descEl = card.querySelector('.opt-desc');
@@ -307,7 +307,6 @@
         }
 
         function selectService(element, nameEn, baseRub, baseUsd) {
-            // Убираем выделение у соседей в той же группе
             element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
 
@@ -322,11 +321,11 @@
             updateTotal();
         }
 
-        function selectComplexity(element, nameEn, addRub, addUsd) {
+        function selectLevel(element, nameEn, addRub, addUsd) {
             element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
 
-            currentComplexity = {
+            currentLevel = {
                 nameRu: element.querySelector('.opt-title').getAttribute('data-ru'),
                 nameEn: nameEn,
                 addRub: addRub,
@@ -337,8 +336,8 @@
         }
 
         function updateTotal() {
-            const totalRub = currentService.baseRub + currentComplexity.addRub;
-            const totalUsd = currentService.baseUsd + currentComplexity.addUsd;
+            const totalRub = currentService.baseRub + currentLevel.addRub;
+            const totalUsd = currentService.baseUsd + currentLevel.addUsd;
 
             if (currentLang === 'ru') {
                 document.getElementById('totalPrice').innerText = `от ${totalRub.toLocaleString()} ₽`;
@@ -352,23 +351,22 @@
             const contact = document.getElementById('clientContact').value.trim();
 
             if (!name || !contact) {
-                alert(currentLang === 'ru' ? "Пожалуйста, укажите ваше имя и контакт для связи!" : "Please fill in your name and contact!");
+                alert(currentLang === 'ru' ? "Пожалуйста, укажите имя и контакт для связи!" : "Please fill in your name and contact!");
                 return;
             }
 
-            const totalRub = currentService.baseRub + currentComplexity.addRub;
-            const totalUsd = currentService.baseUsd + currentComplexity.addUsd;
+            const totalRub = currentService.baseRub + currentLevel.addRub;
+            const totalUsd = currentService.baseUsd + currentLevel.addUsd;
             const priceStr = currentLang === 'ru' ? `от ${totalRub.toLocaleString()} ₽` : `from $${totalUsd}`;
 
             const orderData = {
-                service: `${currentLang === 'ru' ? currentService.nameRu : currentService.nameEn} (${currentLang === 'ru' ? currentComplexity.nameRu : currentComplexity.nameEn})`,
+                service: `${currentLang === 'ru' ? currentService.nameRu : currentService.nameEn} (${currentLang === 'ru' ? currentLevel.nameRu : currentLevel.nameEn})`,
                 price: priceStr,
                 lang: currentLang,
                 name: name,
                 contact: contact
             };
 
-            // Передаем данные боту в ЛС
             tg.sendData(JSON.stringify(orderData));
         }
 
