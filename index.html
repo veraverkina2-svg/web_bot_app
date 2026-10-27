@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>IT Solutions & Telegram Bots</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
@@ -18,216 +18,248 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body { background-color: var(--bg-color); color: var(--text-color); padding: 16px; padding-bottom: 70px; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 10px; }
         h1 { font-size: 17px; font-weight: 700; background: linear-gradient(90deg, #60a5fa, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .lang-switcher { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
+        .lang-switcher { background: var(--card-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
         .subtitle { font-size: 13px; color: var(--hint-color); margin-bottom: 16px; line-height: 1.4; }
         .section-title { font-size: 14px; font-weight: 600; margin-bottom: 10px; color: #93c5fd; }
         .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 16px; }
         .option-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; cursor: pointer; transition: all 0.2s ease; }
         .option-card:hover { border-color: var(--button-color); }
-        .option-card.selected { border: 2px solid var(--button-color); background: rgba(59, 130, 246, 0.15); }
+        .option-card.selected { border: 2px solid var(--button-color); background: rgba(59, 130, 246, 0.15); padding: 11px 13px; }
         .opt-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
         .opt-desc { font-size: 11px; color: var(--hint-color); }
         .summary-box { background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; margin-bottom: 16px; }
-        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+        .summary-row { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; gap: 10px; }
         .summary-row.total { font-weight: 700; font-size: 15px; color: #60a5fa; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 6px; margin-top: 6px; }
         .form-group { margin-top: 10px; }
         .form-group label { display: block; font-size: 11px; color: var(--hint-color); margin-bottom: 3px; }
-        .form-group input { width: 100%; padding: 10px 12px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-color); font-size: 14px; outline: none; }
+        .form-group input { width: 100%; padding: 10px 12px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-color); font-size: 16px; outline: none; }
         .form-group input:focus { border-color: var(--button-color); }
         .btn { background: var(--accent-gradient); color: var(--button-text-color); border: none; width: 100%; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; text-align: center; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
         .btn:active { opacity: 0.85; }
+        .btn:disabled { opacity: 0.6; cursor: default; }
         .footer { text-align: center; font-size: 11px; color: var(--hint-color); margin-top: 16px; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 id="main-title">🚀 Калькулятор IT-проекта</h1>
-        <button class="lang-switcher" onclick="toggleLanguage()">🌐 <span id="lang-label">RU</span></button>
+        <h1 data-i18n="title"></h1>
+        <button class="lang-switcher" id="langBtn" type="button">🌐 <span id="lang-label">RU</span></button>
     </div>
-    <div class="subtitle" id="subtitle-text">Соберите конфигурацию под ваш бюджет (РФ, СНГ, США) и получите аудит воронки в подарок</div>
+    <div class="subtitle" data-i18n="subtitle"></div>
 
-    <div class="section-title" id="step-1-title">1. Выберите основу проекта:</div>
-    <div class="options-grid">
-        <div class="option-card selected" onclick="selectService(this, 'Telegram Bot / Mini App', 15000, 200)">
-            <div class="opt-title" data-en="Telegram Bot / Mini App" data-ru="Telegram-бот / Mini App">Telegram-бот / Mini App</div>
-            <div class="opt-desc" data-en="Automation & web apps inside TG" data-ru="Автоматизация, воронки, лид-захват">Автоматизация, воронки, лид-захват</div>
+    <div class="section-title" data-i18n="step1"></div>
+    <div class="options-grid" id="services">
+        <div class="option-card selected" data-key="bot">
+            <div class="opt-title" data-i18n="svc_bot_t"></div>
+            <div class="opt-desc" data-i18n="svc_bot_d"></div>
         </div>
-        <div class="option-card" onclick="selectService(this, 'Landing Page', 20000, 250)">
-            <div class="opt-title" data-en="Landing Page / Website" data-ru="Продающий сайт / Лендинг">Продающий сайт / Лендинг</div>
-            <div class="opt-desc" data-en="Adaptive design for conversion" data-ru="Адаптивный дизайн под конверсию в заявки">Адаптивный дизайн под конверсию в заявки</div>
+        <div class="option-card" data-key="site">
+            <div class="opt-title" data-i18n="svc_site_t"></div>
+            <div class="opt-desc" data-i18n="svc_site_d"></div>
         </div>
-        <div class="option-card" onclick="selectService(this, 'Full Ecosystem', 35000, 450)">
-            <div class="opt-title" data-en="Ecosystem (Site + Bot)" data-ru="Экосистема (Сайт + Бот)">Экосистема (Сайт + Бот)</div>
-            <div class="opt-desc" data-en="Full turnkey package" data-ru="Мощная связка под ключ для бизнеса">Мощная связка под ключ для бизнеса</div>
+        <div class="option-card" data-key="eco">
+            <div class="opt-title" data-i18n="svc_eco_t"></div>
+            <div class="opt-desc" data-i18n="svc_eco_d"></div>
         </div>
     </div>
 
-    <div class="section-title" id="step-2-title">2. Срочность и масштаб:</div>
-    <div class="options-grid">
-        <div class="option-card selected" onclick="selectLevel(this, 'Standard MVP', 0, 0)">
-            <div class="opt-title" data-en="Standard MVP (Fast launch)" data-ru="Стандарт MVP (Быстрый запуск)">Стандарт MVP (Быстрый запуск)</div>
-            <div class="opt-desc" data-en="Ready in 2-3 days" data-ru="Базовый функционал, запуск за 2-3 дня">Базовый функционал, запуск за 2-3 дня</div>
+    <div class="section-title" data-i18n="step2"></div>
+    <div class="options-grid" id="levels">
+        <div class="option-card selected" data-key="mvp">
+            <div class="opt-title" data-i18n="lvl_mvp_t"></div>
+            <div class="opt-desc" data-i18n="lvl_mvp_d"></div>
         </div>
-        <div class="option-card" onclick="selectLevel(this, 'Custom + AI Integration', 15000, 150)">
-            <div class="opt-title" data-en="Custom UI + AI Workflows" data-ru="Премиум дизайн + AI интеграции">Премиум дизайн + AI интеграции</div>
-            <div class="opt-desc" data-en="Advanced features & AI agents" data-ru="Уникальный стиль, ИИ-агенты, анимации">Уникальный стиль, ИИ-агенты, анимации</div>
+        <div class="option-card" data-key="pro">
+            <div class="opt-title" data-i18n="lvl_pro_t"></div>
+            <div class="opt-desc" data-i18n="lvl_pro_d"></div>
         </div>
     </div>
 
     <div class="summary-box">
         <div class="summary-row">
-            <span id="summary-service-label">Решение:</span>
-            <strong id="selectedServiceName">Telegram-бот / Mini App</strong>
+            <span data-i18n="summaryService"></span>
+            <strong id="selectedServiceName"></strong>
         </div>
         <div class="summary-row total">
-            <span id="summary-total-label">Инвестиции:</span>
-            <span id="totalPrice">от 15 000 ₽</span>
+            <span data-i18n="summaryTotal"></span>
+            <span id="totalPrice"></span>
         </div>
 
         <div class="form-group">
-            <label id="label-name">Ваше имя:</label>
-            <input type="text" id="clientName" placeholder="Например, Алексей" autocomplete="off">
+            <label for="clientName" data-i18n="labelName"></label>
+            <input type="text" id="clientName" autocomplete="off">
         </div>
         <div class="form-group">
-            <label id="label-contact">Телефон или Telegram:</label>
-            <input type="text" id="clientContact" placeholder="+7 999 000-00-00 / @username" autocomplete="off">
+            <label for="clientContact" data-i18n="labelContact"></label>
+            <input type="text" id="clientContact" autocomplete="off">
         </div>
     </div>
 
-    <button class="btn" id="submitBtn" onclick="submitOrder()">🚀 Отправить расчет и забрать аудит</button>
+    <button class="btn" id="submitBtn" type="button" data-i18n="submitBtn"></button>
 
-    <div class="footer">
-        ⚡️ Точная смета фиксируется после ТЗ
-    </div>
+    <div class="footer" data-i18n="footer"></div>
 
     <script>
+        // ====== НАСТРОЙКИ ======
+        // Ваш Telegram username БЕЗ @ (запасной вариант, если Mini App открыт не через кнопку клавиатуры)
+        const DEV_USERNAME = "ВАШ_USERNAME";
+        // =======================
+
         const tg = window.Telegram.WebApp;
+        tg.ready();
         tg.expand();
 
-        let currentLang = 'ru';
-        let currentService = { nameRu: "Telegram-бот / Mini App", nameEn: "Telegram Bot / Mini App", baseRub: 15000, baseUsd: 200 };
-        let currentLevel = { nameRu: "Стандарт MVP", nameEn: "Standard MVP", addRub: 0, addUsd: 0 };
+        const SERVICES = {
+            bot:  { rub: 15000, usd: 200, ru: "Telegram-бот / Mini App", en: "Telegram Bot / Mini App" },
+            site: { rub: 20000, usd: 250, ru: "Продающий сайт / Лендинг", en: "Landing Page / Website" },
+            eco:  { rub: 35000, usd: 450, ru: "Экосистема (Сайт + Бот)",  en: "Ecosystem (Site + Bot)" }
+        };
+        const LEVELS = {
+            mvp: { rub: 0,     usd: 0,   ru: "Стандарт MVP",           en: "Standard MVP" },
+            pro: { rub: 15000, usd: 150, ru: "Премиум дизайн + AI интеграции", en: "Custom UI + AI Workflows" }
+        };
 
-        const uiText = {
+        const I18N = {
+            ru: {
+                title: "🚀 Калькулятор IT-проекта",
+                subtitle: "Соберите конфигурацию под ваш бюджет (РФ, СНГ, США) и получите аудит воронки в подарок",
+                step1: "1. Выберите основу проекта:",
+                step2: "2. Срочность и масштаб:",
+                svc_bot_t: "Telegram-бот / Mini App", svc_bot_d: "Автоматизация, воронки, лид-захват",
+                svc_site_t: "Продающий сайт / Лендинг", svc_site_d: "Адаптивный дизайн под конверсию в заявки",
+                svc_eco_t: "Экосистема (Сайт + Бот)", svc_eco_d: "Мощная связка под ключ для бизнеса",
+                lvl_mvp_t: "Стандарт MVP (Быстрый запуск)", lvl_mvp_d: "Базовый функционал, запуск за 2-3 дня",
+                lvl_pro_t: "Премиум дизайн + AI интеграции", lvl_pro_d: "Уникальный стиль, ИИ-агенты, анимации",
+                summaryService: "Решение:",
+                summaryTotal: "Инвестиции:",
+                labelName: "Ваше имя:",
+                labelContact: "Телефон или Telegram:",
+                phName: "Например, Алексей",
+                phContact: "+7 999 000-00-00 / @username",
+                submitBtn: "🚀 Отправить расчет и забрать аудит",
+                footer: "⚡️ Точная смета фиксируется после ТЗ",
+                fillAll: "Пожалуйста, укажите имя и контакт для связи!",
+                reopen: "Чтобы отправить заявку, закройте окно и откройте калькулятор кнопкой под полем ввода (🚀 Открыть Калькулятор).",
+                sending: "Отправляем..."
+            },
             en: {
                 title: "🚀 IT Project Calculator",
                 subtitle: "Configure your solution (Russia, CIS, USA) and get a free funnel audit",
                 step1: "1. Choose core solution:",
                 step2: "2. Scope & Timeline:",
+                svc_bot_t: "Telegram Bot / Mini App", svc_bot_d: "Automation, funnels, lead capture",
+                svc_site_t: "Landing Page / Website", svc_site_d: "Adaptive design built for conversion",
+                svc_eco_t: "Ecosystem (Site + Bot)", svc_eco_d: "Full turnkey package for business",
+                lvl_mvp_t: "Standard MVP (Fast launch)", lvl_mvp_d: "Core features, ready in 2-3 days",
+                lvl_pro_t: "Custom UI + AI Workflows", lvl_pro_d: "Unique style, AI agents, animations",
                 summaryService: "Solution:",
                 summaryTotal: "Investment:",
                 labelName: "Your Name:",
                 labelContact: "Phone or Telegram handle:",
-                submitBtn: "🚀 Send estimate & claim bonus"
-            },
-            ru: {
-                title: "🚀 Калькулятор IT-проекта",
-                subtitle: "Соберите конфигурацию под ваш бюджет (РФ, СНГ, США) и получите аудит воронки",
-                step1: "1. Выберите основу проекта:",
-                step2: "2. Срочность и масштаб:",
-                summaryService: "Решение:",
-                summaryTotal: "Инвестиции:",
-                labelName: "Ваше имя:",
-                labelContact: "Телефон или Telegram:",
-                submitBtn: "🚀 Отправить расчет и забрать аудит"
+                phName: "e.g. Alex",
+                phContact: "+1 555 000-0000 / @username",
+                submitBtn: "🚀 Send estimate & claim audit",
+                footer: "⚡️ Final quote is fixed after the brief",
+                fillAll: "Please fill in your name and contact!",
+                reopen: "To send your request, close this window and open the calculator with the button under the message box (🚀 Open Calculator).",
+                sending: "Sending..."
             }
         };
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'ru' : 'en';
-            document.getElementById('lang-label').innerText = currentLang.toUpperCase();
-            
-            document.getElementById('main-title').innerText = uiText[currentLang].title;
-            document.getElementById('subtitle-text').innerText = uiText[currentLang].subtitle;
-            document.getElementById('step-1-title').innerText = uiText[currentLang].step1;
-            document.getElementById('step-2-title').innerText = uiText[currentLang].step2;
-            document.getElementById('summary-service-label').innerText = uiText[currentLang].summaryService;
-            document.getElementById('summary-total-label').innerText = uiText[currentLang].summaryTotal;
-            document.getElementById('label-name').innerText = uiText[currentLang].labelName;
-            document.getElementById('label-contact').innerText = uiText[currentLang].labelContact;
-            document.getElementById('submitBtn').innerText = uiText[currentLang].submitBtn;
+        const tgLang = (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.language_code) || "ru";
+        let currentLang = ["ru", "uk", "be", "kk"].includes(tgLang) ? "ru" : "en";
+        let serviceKey = "bot";
+        let levelKey = "mvp";
 
-            document.querySelectorAll('.option-card').forEach(card => {
-                const titleEl = card.querySelector('.opt-title');
-                const descEl = card.querySelector('.opt-desc');
-                titleEl.innerText = titleEl.getAttribute(`data-${currentLang}`);
-                descEl.innerText = descEl.getAttribute(`data-${currentLang}`);
+        function t(key) { return I18N[currentLang][key]; }
+
+        function renderPrice() {
+            const rub = SERVICES[serviceKey].rub + LEVELS[levelKey].rub;
+            const usd = SERVICES[serviceKey].usd + LEVELS[levelKey].usd;
+            return currentLang === "ru"
+                ? "от " + rub.toLocaleString("ru-RU") + " ₽"
+                : "from $" + usd;
+        }
+
+        function applyLanguage() {
+            document.documentElement.lang = currentLang;
+            document.getElementById("lang-label").textContent = currentLang.toUpperCase();
+            document.querySelectorAll("[data-i18n]").forEach(function (el) {
+                el.textContent = t(el.getAttribute("data-i18n"));
             });
-
-            updateTotal();
+            document.getElementById("clientName").placeholder = t("phName");
+            document.getElementById("clientContact").placeholder = t("phContact");
+            document.getElementById("selectedServiceName").textContent = SERVICES[serviceKey][currentLang];
+            document.getElementById("totalPrice").textContent = renderPrice();
         }
 
-        function selectService(element, nameEn, baseRub, baseUsd) {
-            element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
-
-            currentService = {
-                nameRu: element.querySelector('.opt-title').getAttribute('data-ru'),
-                nameEn: nameEn,
-                baseRub: baseRub,
-                baseUsd: baseUsd
-            };
-
-            document.getElementById('selectedServiceName').innerText = currentLang === 'ru' ? currentService.nameRu : currentService.nameEn;
-            updateTotal();
+        function bindGroup(containerId, onPick) {
+            const cards = document.querySelectorAll("#" + containerId + " .option-card");
+            cards.forEach(function (card) {
+                card.addEventListener("click", function () {
+                    cards.forEach(function (c) { c.classList.remove("selected"); });
+                    card.classList.add("selected");
+                    onPick(card.getAttribute("data-key"));
+                    applyLanguage();
+                });
+            });
         }
 
-        function selectLevel(element, nameEn, addRub, addUsd) {
-            element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
-            element.classList.add('selected');
+        bindGroup("services", function (k) { serviceKey = k; });
+        bindGroup("levels", function (k) { levelKey = k; });
 
-            currentLevel = {
-                nameRu: element.querySelector('.opt-title').getAttribute('data-ru'),
-                nameEn: nameEn,
-                addRub: addRub,
-                addUsd: addUsd
-            };
+        document.getElementById("langBtn").addEventListener("click", function () {
+            currentLang = currentLang === "ru" ? "en" : "ru";
+            applyLanguage();
+        });
 
-            updateTotal();
+        function notify(msg) {
+            try { tg.showAlert(msg); } catch (e) { alert(msg); }
         }
 
-        function updateTotal() {
-            const totalRub = currentService.baseRub + currentLevel.addRub;
-            const totalUsd = currentService.baseUsd + currentLevel.addUsd;
-
-            if (currentLang === 'ru') {
-                document.getElementById('totalPrice').innerText = `от ${totalRub.toLocaleString()} ₽`;
-            } else {
-                document.getElementById('totalPrice').innerText = `from $${totalUsd}`;
-            }
-        }
-
-        function submitOrder() {
-            const name = document.getElementById('clientName').value.trim();
-            const contact = document.getElementById('clientContact').value.trim();
+        document.getElementById("submitBtn").addEventListener("click", function () {
+            const name = document.getElementById("clientName").value.trim();
+            const contact = document.getElementById("clientContact").value.trim();
 
             if (!name || !contact) {
-                alert(currentLang === 'ru' ? "Пожалуйста, укажите имя и контакт для связи!" : "Please fill in your name and contact!");
+                notify(t("fillAll"));
                 return;
             }
 
-            const totalRub = currentService.baseRub + currentLevel.addRub;
-            const totalUsd = currentService.baseUsd + currentLevel.addUsd;
-            const priceStr = currentLang === 'ru' ? `от ${totalRub.toLocaleString()} ₽` : `from $${totalUsd}`;
-
             const orderData = {
-                service: `${currentLang === 'ru' ? currentService.nameRu : currentService.nameEn} (${currentLang === 'ru' ? currentLevel.nameRu : currentLevel.nameEn})`,
-                price: priceStr,
+                service: SERVICES[serviceKey][currentLang] + " (" + LEVELS[levelKey][currentLang] + ")",
+                price: renderPrice(),
                 lang: currentLang,
                 name: name,
                 contact: contact
             };
 
-            tg.sendData(JSON.stringify(orderData));
-        }
+            // При открытии через inline-кнопку или меню sendData() молча не работает.
+            const openedViaInline = tg.initDataUnsafe && tg.initDataUnsafe.query_id;
 
-        window.onload = function() {
-            toggleLanguage();
-            toggleLanguage();
-        };
+            if (openedViaInline) {
+                if (DEV_USERNAME && DEV_USERNAME !== "ВАШ_USERNAME") {
+                    const text = "🔔 Новая заявка\n" +
+                        "Решение: " + orderData.service + "\n" +
+                        "Цена: " + orderData.price + "\n" +
+                        "Имя: " + orderData.name + "\n" +
+                        "Контакт: " + orderData.contact;
+                    tg.openTelegramLink("https://t.me/" + DEV_USERNAME + "?text=" + encodeURIComponent(text));
+                } else {
+                    notify(t("reopen"));
+                }
+                return;
+            }
+
+            this.disabled = true;
+            this.textContent = t("sending");
+            tg.sendData(JSON.stringify(orderData));
+        });
+
+        applyLanguage();
     </script>
 </body>
 </html>
