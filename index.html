@@ -1,135 +1,335 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web & Bot Dev | Fast Funnels</title>
+    <title>IT Solutions & Telegram Bots</title>
+    <!-- Подключаем Telegram Web App скрипт -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        body { background-color: var(--tg-theme-bg-color, #0f172a); color: var(--tg-theme-text-color, #f8fafc); line-height: 1.6; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { max-width: 600px; width: 100%; background: #1e293b; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #334155; position: relative; }
-        
-        /* Переключатель языков */
-        .lang-switch { position: absolute; top: 20px; right: 20px; display: flex; gap: 5px; background: #0f172a; padding: 4px; border-radius: 8px; border: 1px solid #334155; }
-        .lang-btn { background: transparent; border: none; color: #94a3b8; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.2s; }
-        .lang-btn.active { background: #2563eb; color: #ffffff; }
+        :root {
+            --bg-color: var(--tg-theme-bg-color, #0f172a);
+            --text-color: var(--tg-theme-text-color, #f8fafc);
+            --hint-color: var(--tg-theme-hint-color, #94a3b8);
+            --button-color: var(--tg-theme-button-color, #3b82f6);
+            --button-text-color: var(--tg-theme-button-text-color, #ffffff);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
 
-        h1 { font-size: 22px; margin-bottom: 12px; color: #ffffff; text-align: center; margin-top: 15px; }
-        p { color: #94a3b8; margin-bottom: 20px; font-size: 14px; text-align: center; }
-        .highlight { color: #38bdf8; font-weight: 600; }
-        
-        .services-grid { display: grid; gap: 12px; margin-bottom: 24px; }
-        .service-card { background: #0f172a; border: 1px solid #334155; padding: 16px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
-        .service-card:hover { border-color: #38bdf8; transform: translateY(-2px); }
-        .service-title { font-weight: bold; color: #f8fafc; font-size: 15px; margin-bottom: 4px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px; }
-        .service-price { color: #38bdf8; }
-        .service-desc { font-size: 13px; color: #94a3b8; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
 
-        .btn { display: block; width: 100%; background: #2563eb; color: white; text-align: center; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 15px; border: none; cursor: pointer; transition: background 0.2s; }
-        .btn:hover { background: #1d4ed8; }
-        
-        .footer { text-align: center; margin-top: 15px; font-size: 12px; color: #64748b; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+            padding-bottom: 50px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .lang-switcher {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .services-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .service-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px;
+            transition: transform 0.2s, border-color 0.2s;
+            cursor: pointer;
+        }
+
+        .service-card:hover {
+            border-color: var(--button-color);
+        }
+
+        .service-card.selected {
+            border: 2px solid var(--button-color);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .service-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .service-price {
+            font-size: 15px;
+            color: var(--button-color);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .service-desc {
+            font-size: 13px;
+            color: var(--hint-color);
+            line-height: 1.4;
+        }
+
+        /* Форма заказа */
+        .order-form {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px;
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .order-form.active {
+            display: block;
+        }
+
+        .order-form h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--hint-color);
+            margin-bottom: 4px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        .btn {
+            background-color: var(--button-color);
+            color: var(--button-text-color);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn:active {
+            opacity: 0.8;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--hint-color);
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- Переключатель языка -->
-        <div class="lang-switch">
-            <button class="lang-btn active" id="btn-en" onclick="setLanguage('en')">EN</button>
-            <button class="lang-btn" id="btn-ru" onclick="setLanguage('ru')">RU</button>
+    <div class="header">
+        <h1 id="main-title">🚀 IT Solutions & Bots</h1>
+        <button class="lang-switcher" onclick="toggleLanguage()">🌐 <span id="lang-label">RU</span></button>
+    </div>
+
+    <div class="services-list" id="services-container">
+        <!-- Карточка 1 -->
+        <div class="service-card" onclick="selectService(this, 'High-Converting Website', 'from $1,000', 'от 95 000 ₽')">
+            <div class="service-title" data-en="High-Converting Website" data-ru="Продающий сайт под ключ">High-Converting Website</div>
+            <div class="service-price price-val" data-en="from $1,000" data-ru="от 95 000 ₽">from $1,000</div>
+            <div class="service-desc" data-en="Fast, responsive landing page optimized for lead capture." data-ru="Быстрый адаптивный сайт, оптимизированный под конверсию и заявки.">Fast, responsive landing page optimized for lead capture.</div>
         </div>
 
-        <h1 id="ui-title">🚀 Custom Web & Bot Development</h1>
-        <p id="ui-subtitle">Select a solution below to launch your project. Built with lightning speed (<span class="highlight">delivered in hours</span>).</p>
-
-        <div class="services-grid">
-            <div class="service-card" onclick="selectService('Website Only', this)">
-                <div class="service-title"><span id="s1-name">🌐 High-Converting Website</span> <span class="service-price">from $1,000</span></div>
-                <div class="service-desc" id="s1-desc">Fast, responsive landing page optimized for lead capture.</div>
-            </div>
-            <div class="service-card" onclick="selectService('Telegram Bot', this)">
-                <div class="service-title"><span id="s2-name">🤖 Telegram Bot Automation</span> <span class="service-price">from $1,000</span></div>
-                <div class="service-desc" id="s2-desc">Custom bot logic, user qualification, and instant data delivery.</div>
-            </div>
-            <div class="service-card" onclick="selectService('Full Turnkey Solution (Site + Bot)', this)" style="border-color: #38bdf8;">
-                <div class="service-title"><span id="s3-name">⚡ Full Turnkey Solution</span> <span class="service-price">from $1,500</span></div>
-                <div class="service-desc" id="s3-desc">Complete web + bot ecosystem built and deployed in 5 hours.</div>
-            </div>
+        <!-- Карточка 2 -->
+        <div class="service-card" onclick="selectService(this, 'Telegram Bot Automation', 'from $1,000', 'от 95 000 ₽')">
+            <div class="service-title" data-en="Telegram Bot Automation" data-ru="Telegram-бот с автоматизацией">Telegram Bot Automation</div>
+            <div class="service-price price-val" data-en="from $1,000" data-ru="от 95 000 ₽">from $1,000</div>
+            <div class="service-desc" data-en="Custom bot logic, user qualification, and instant data delivery." data-ru="Кастомная логика ботов, воронки, квалификация клиентов и мгновенная отправка заявок.">Custom bot logic, user qualification, and instant data delivery.</div>
         </div>
 
-        <button class="btn" id="ui-btn" onclick="submitOrder()">Order Selected Service</button>
-        
-        <div class="footer">
-            © 2026 • Powered by Telegram Mini App
+        <!-- Карточка 3 -->
+        <div class="service-card" onclick="selectService(this, 'Full Turnkey Solution', 'from $1,500', 'от 145 000 ₽')">
+            <div class="service-title" data-en="Full Turnkey Solution" data-ru="Комплексная экосистема (Сайт + Бот)">Full Turnkey Solution</div>
+            <div class="service-price price-val" data-en="from $1,500" data-ru="от 145 000 ₽">from $1,500</div>
+            <div class="service-desc" data-en="Complete web + bot ecosystem built and deployed in 5 hours." data-ru="Связка сайта и бота под ключ, готовая к запуску рекламы и привлечению лидов.">Complete web + bot ecosystem built and deployed in 5 hours.</div>
         </div>
     </div>
 
-    <script>
-        let currentLang = 'en';
-        let selected = "Full Turnkey Solution (Site + Bot)";
+    <!-- Форма ввода данных -->
+    <div class="order-form" id="orderForm">
+        <h3 id="form-heading">📋 Введите данные для связи:</h3>
+        <div class="form-group">
+            <label id="label-name">Ваше имя:</label>
+            <input type="text" id="clientName" placeholder="Например, Алексей">
+        </div>
+        <div class="form-group">
+            <label id="label-contact">Телефон или Telegram для связи:</label>
+            <input type="text" id="clientContact" placeholder="+7 999 000-00-00 / @username">
+        </div>
+    </div>
 
-        const texts = {
+    <!-- Кнопка отправки -->
+    <button class="btn" id="submitBtn" onclick="submitOrder()">Выберите услугу выше</button>
+
+    <div class="footer">
+        © 2026 • Powered by Telegram Mini App
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let currentLang = 'ru'; // По умолчанию русский
+        let selectedServiceData = null;
+
+        // Тексты интерфейса
+        const uiText = {
             en: {
-                title: "🚀 Custom Web & Bot Development",
-                subtitle: 'Select a solution below to launch your project. Built with lightning speed (<span class="highlight">delivered in hours</span>).',
-                s1_name: "🌐 High-Converting Website",
-                s1_desc: "Fast, responsive landing page optimized for lead capture.",
-                s2_name: "🤖 Telegram Bot Automation",
-                s2_desc: "Custom bot logic, user qualification, and instant data delivery.",
-                s3_name: "⚡ Full Turnkey Solution",
-                s3_desc: "Complete web + bot ecosystem built and deployed in 5 hours.",
-                btn: "Order Selected Service"
+                title: "🚀 IT Solutions & Bots",
+                formHeading: "📋 Enter your contact details:",
+                labelName: "Your Name:",
+                labelContact: "Phone or Telegram handle:",
+                placeholderName: "e.g., Alex",
+                placeholderContact: "+1 234 567-8900 / @username",
+                selectPrompt: "Please select a service above",
+                orderBtn: "Order: "
             },
             ru: {
-                title: "🚀 Разработка сайтов и ботов под ключ",
-                subtitle: 'Выберите решение для запуска вашего проекта. Сборка с молниеносной скоростью (<span class="highlight">за считанные часы</span>).',
-                s1_name: "🌐 Сайт под ключ",
-                s1_desc: "Быстрый адаптивный лендинг для сбора заявок и продаж.",
-                s2_name: "🤖 Telegram-бот автоворонок",
-                s2_desc: "Бот-помощник, квалификация лидов и выдача материалов 24/7.",
-                s3_name: "⚡ Связка «Сайт + Бот»",
-                s3_desc: "Готовая экосистема под ключ, собранная за 5 часов.",
-                btn: "Заказать выбранную услугу"
+                title: "🚀 ИТ-решения и Боты",
+                formHeading: "📋 Введите данные для связи:",
+                labelName: "Ваше имя:",
+                labelContact: "Телефон или Telegram:",
+                placeholderName: "Например, Алексей",
+                placeholderContact: "+7 999 000-00-00 / @username",
+                selectPrompt: "Выберите услугу выше",
+                orderBtn: "Заказать: "
             }
         };
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-            document.getElementById('btn-ru').classList.toggle('active', lang === 'ru');
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ru' : 'en';
+            document.getElementById('lang-label').innerText = currentLang.toUpperCase();
+            
+            // Обновляем тексты
+            document.getElementById('main-title').innerText = uiText[currentLang].title;
+            document.getElementById('form-heading').innerText = uiText[currentLang].formHeading;
+            document.getElementById('label-name').innerText = uiText[currentLang].labelName;
+            document.getElementById('label-contact').innerText = uiText[currentLang].labelContact;
+            document.getElementById('clientName').placeholder = uiText[currentLang].placeholderName;
+            document.getElementById('clientContact').placeholder = uiText[currentLang].placeholderContact;
 
-            document.getElementById('ui-title').innerText = texts[lang].title;
-            document.getElementById('ui-subtitle').innerHTML = texts[lang].subtitle;
-            document.getElementById('s1-name').innerText = texts[lang].s1_name;
-            document.getElementById('s1-desc').innerText = texts[lang].s1_desc;
-            document.getElementById('s2-name').innerText = texts[lang].s2_name;
-            document.getElementById('s2-desc').innerText = texts[lang].s2_desc;
-            document.getElementById('s3-name').innerText = texts[lang].s3_name;
-            document.getElementById('s3-desc').innerText = texts[lang].s3_desc;
-            document.getElementById('ui-btn').innerText = texts[lang].btn;
+            // Обновляем карточки услуг (название, описание, цены в долларах или рублях)
+            document.querySelectorAll('.service-card').forEach(card => {
+                const titleEl = card.querySelector('.service-title');
+                const priceEl = card.querySelector('.service-price');
+                const descEl = card.querySelector('.service-desc');
+
+                titleEl.innerText = titleEl.getAttribute(`data-${currentLang}`);
+                priceEl.innerText = priceEl.getAttribute(`data-${currentLang}`);
+                descEl.innerText = descEl.getAttribute(`data-${currentLang}`);
+            });
+
+            if (selectedServiceData) {
+                const activePrice = currentLang === 'ru' ? selectedServiceData.priceRu : selectedServiceData.priceEn;
+                document.getElementById('submitBtn').innerText = uiText[currentLang].orderBtn + selectedServiceData.name[currentLang];
+            } else {
+                document.getElementById('submitBtn').innerText = uiText[currentLang].selectPrompt;
+            }
         }
 
-        function selectService(name, element) {
-            selected = name;
-            document.querySelectorAll('.service-card').forEach(card => {
-                card.style.borderColor = '#334155';
-            });
-            element.style.borderColor = '#38bdf8';
+        function selectService(cardElement, serviceNameEn, priceEn, priceRu) {
+            // Убираем класс выбора у всех
+            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+            // Добавляем текущей
+            cardElement.classList.add('selected');
+
+            selectedServiceData = {
+                name: { en: serviceNameEn, ru: cardElement.querySelector('.service-title').getAttribute('data-ru') },
+                priceEn: priceEn,
+                priceRu: priceRu
+            };
+
+            // Показываем форму ввода
+            document.getElementById('orderForm').classList.add('active');
+
+            // Обновляем кнопку
+            const activePrice = currentLang === 'ru' ? priceRu : priceEn;
+            document.getElementById('submitBtn').innerText = uiText[currentLang].orderBtn + selectedServiceData.name[currentLang] + ` (${activePrice})`;
         }
 
         function submitOrder() {
-            const data = { service: selected, lang: currentLang };
-            
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initData) {
-                window.Telegram.WebApp.sendData(JSON.stringify(data));
-                window.Telegram.WebApp.close();
-            } else {
-                window.open(`https://t.me/andrey_digita_ai?text=Hi!%20I%20want%20to%20order:%20${encodeURIComponent(selected)}`, '_blank');
+            if (!selectedServiceData) {
+                alert(currentLang === 'ru' ? "Пожалуйста, выберите услугу!" : "Please select a service first!");
+                return;
             }
-        }
-    </script>
 
+            const name = document.getElementById('clientName').value.trim();
+            const contact = document.getElementById('clientContact').value.trim();
+
+            if (!name || !contact) {
+                alert(currentLang === 'ru' ? "Пожалуйста, заполните имя и контакт для связи!" : "Please fill in your name and contact!");
+                return;
+            }
+
+            const activePrice = currentLang === 'ru' ? selectedServiceData.priceRu : selectedServiceData.priceEn;
+
+            const orderData = {
+                service: selectedServiceData.name[currentLang],
+                price: activePrice,
+                lang: currentLang,
+                name: name,
+                contact: contact
+            };
+
+            // Отправляем данные в Telegram бота
+            tg.sendData(JSON.stringify(orderData));
+        }
+
+        // Устанавливаем начальный язык при загрузке (Русский по умолчанию)
+        window.onload = function() {
+            // Если Telegram передает язык пользователя и он английский, можно переключить, но по дефолту оставим RU
+            toggleLanguage();
+            toggleLanguage(); // Переключаем дважды, чтобы проинициализировать русские дата-атрибуты
+        };
+    </script>
 </body>
 </html>
