@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT Solutions & Telegram Bots</title>
-    <!-- Подключаем Telegram Web App скрипт -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: var(--tg-theme-bg-color, #0f172a);
+            --bg-color: var(--tg-theme-bg-color, #0b0f19);
             --text-color: var(--tg-theme-text-color, #f8fafc);
             --hint-color: var(--tg-theme-hint-color, #94a3b8);
             --button-color: var(--tg-theme-button-color, #3b82f6);
             --button-text-color: var(--tg-theme-button-text-color, #ffffff);
-            --card-bg: rgba(30, 41, 59, 0.7);
-            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --border-color: rgba(59, 130, 246, 0.2);
+            --accent-glow: rgba(59, 130, 246, 0.15);
         }
 
         * {
@@ -27,20 +27,23 @@
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 20px;
-            padding-bottom: 50px;
+            padding: 16px;
+            padding-bottom: 60px;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
+            background: linear-gradient(90deg, #60a5fa, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .lang-switcher {
@@ -50,75 +53,81 @@
             padding: 6px 12px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .services-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .service-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 18px;
-            transition: transform 0.2s, border-color 0.2s;
-            cursor: pointer;
-        }
-
-        .service-card:hover {
-            border-color: var(--button-color);
-        }
-
-        .service-card.selected {
-            border: 2px solid var(--button-color);
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .service-title {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
-
-        .service-price {
-            font-size: 15px;
-            color: var(--button-color);
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .service-desc {
             font-size: 13px;
-            color: var(--hint-color);
-            line-height: 1.4;
+            font-weight: 600;
         }
 
-        /* Форма заказа */
-        .order-form {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 18px;
-            display: none;
+        /* Шаги калькулятора */
+        .step-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #93c5fd;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
-        .order-form.active {
-            display: block;
+        .option-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
 
-        .order-form h3 {
+        .option-card:hover {
+            border-color: var(--button-color);
+        }
+
+        .option-card.selected {
+            border: 2px solid var(--button-color);
+            background: var(--accent-glow);
+        }
+
+        .opt-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .opt-desc {
+            font-size: 12px;
+            color: var(--hint-color);
+        }
+
+        /* Блок итогов и контактов */
+        .summary-box {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .summary-row.total {
+            font-weight: 700;
             font-size: 16px;
-            margin-bottom: 12px;
+            color: #60a5fa;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 8px;
+            margin-top: 8px;
         }
 
         .form-group {
-            margin-bottom: 12px;
+            margin-top: 12px;
         }
 
         .form-group label {
@@ -130,118 +139,144 @@
 
         .form-group input {
             width: 100%;
-            padding: 10px 12px;
-            background: rgba(15, 23, 42, 0.6);
+            padding: 12px;
+            background: #0f172a;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: var(--text-color);
             font-size: 14px;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--button-color);
         }
 
         .btn {
-            background-color: var(--button-color);
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: var(--button-text-color);
             border: none;
             width: 100%;
             padding: 14px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             text-align: center;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            transition: opacity 0.2s;
         }
 
         .btn:active {
-            opacity: 0.8;
+            opacity: 0.85;
         }
 
         .footer {
             text-align: center;
-            font-size: 12px;
+            font-size: 11px;
             color: var(--hint-color);
-            margin-top: 20px;
+            margin-top: 24px;
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1 id="main-title">🚀 IT Solutions & Bots</h1>
+        <h1 id="main-title">🚀 Калькулятор IT-решений</h1>
         <button class="lang-switcher" onclick="toggleLanguage()">🌐 <span id="lang-label">RU</span></button>
     </div>
 
-    <div class="services-list" id="services-container">
-        <!-- Карточка 1 -->
-        <div class="service-card" onclick="selectService(this, 'High-Converting Website', 'from $1,000', 'от 95 000 ₽')">
-            <div class="service-title" data-en="High-Converting Website" data-ru="Продающий сайт под ключ">High-Converting Website</div>
-            <div class="service-price price-val" data-en="from $1,000" data-ru="от 95 000 ₽">from $1,000</div>
-            <div class="service-desc" data-en="Fast, responsive landing page optimized for lead capture." data-ru="Быстрый адаптивный сайт, оптимизированный под конверсию и заявки.">Fast, responsive landing page optimized for lead capture.</div>
+    <!-- Шаг 1: Выбор направления -->
+    <div class="step-title" id="step-1-title">1. Что вам необходимо создать?</div>
+    <div class="options-grid">
+        <div class="option-card selected" onclick="selectService(this, 'Telegram Bot', 45000, 500)">
+            <div class="opt-title" data-en="Telegram Bot / Mini App" data-ru="Telegram-бот или Mini App">Telegram-бот или Mini App</div>
+            <div class="opt-desc" data-en="Automation, funnels, web apps inside TG" data-ru="Автоматизация, воронки, веб-приложения внутри Telegram">Автоматизация, воронки, веб-приложения внутри Telegram</div>
         </div>
-
-        <!-- Карточка 2 -->
-        <div class="service-card" onclick="selectService(this, 'Telegram Bot Automation', 'from $1,000', 'от 95 000 ₽')">
-            <div class="service-title" data-en="Telegram Bot Automation" data-ru="Telegram-бот с автоматизацией">Telegram Bot Automation</div>
-            <div class="service-price price-val" data-en="from $1,000" data-ru="от 95 000 ₽">from $1,000</div>
-            <div class="service-desc" data-en="Custom bot logic, user qualification, and instant data delivery." data-ru="Кастомная логика ботов, воронки, квалификация клиентов и мгновенная отправка заявок.">Custom bot logic, user qualification, and instant data delivery.</div>
+        <div class="option-card" onclick="selectService(this, 'Landing Page', 50000, 550)">
+            <div class="opt-title" data-en="High-Converting Website" data-ru="Продающий сайт / Лендинг">Продающий сайт / Лендинг</div>
+            <div class="opt-desc" data-en="Modern adaptive landing for traffic" data-ru="Современный адаптивный сайт под конверсию в заявки">Современный адаптивный сайт под конверсию в заявки</div>
         </div>
-
-        <!-- Карточка 3 -->
-        <div class="service-card" onclick="selectService(this, 'Full Turnkey Solution', 'from $1,500', 'от 145 000 ₽')">
-            <div class="service-title" data-en="Full Turnkey Solution" data-ru="Комплексная экосистема (Сайт + Бот)">Full Turnkey Solution</div>
-            <div class="service-price price-val" data-en="from $1,500" data-ru="от 145 000 ₽">from $1,500</div>
-            <div class="service-desc" data-en="Complete web + bot ecosystem built and deployed in 5 hours." data-ru="Связка сайта и бота под ключ, готовая к запуску рекламы и привлечению лидов.">Complete web + bot ecosystem built and deployed in 5 hours.</div>
+        <div class="option-card" onclick="selectService(this, 'Full Ecosystem', 95000, 1050)">
+            <div class="opt-title" data-en="Full Ecosystem (Site + Bot)" data-ru="Комплекс: Сайт + Telegram-бот">Комплекс: Сайт + Telegram-бот</div>
+            <div class="opt-desc" data-en="Full turnkey package for business scaling" data-ru="Мощная связка под ключ для максимального потока лидов">Мощная связка под ключ для максимального потока лидов</div>
         </div>
     </div>
 
-    <!-- Форма ввода данных -->
-    <div class="order-form" id="orderForm">
-        <h3 id="form-heading">📋 Введите данные для связи:</h3>
+    <!-- Шаг 2: Сложность / Дизайн -->
+    <div class="step-title" id="step-2-title">2. Уровень реализации и дизайна</div>
+    <div class="options-grid">
+        <div class="option-card selected" onclick="selectComplexity(this, 'Standard', 0, 0)">
+            <div class="opt-title" data-en="Standard UI / Fast Launch" data-ru="Стандарт / Быстрый запуск">Стандарт / Быстрый запуск</div>
+            <div class="opt-desc" data-en="Clean UI, standard logic, ready in 2-3 days" data-ru="Чистый интерфейс, стандартная логика, готово за 2-3 дня">Чистый интерфейс, стандартная логика, готово за 2-3 дня</div>
+        </div>
+        <div class="option-card" onclick="selectComplexity(this, 'Premium / AI', 35000, 400)">
+            <div class="opt-title" data-en="Premium custom design + AI" data-ru="Премиум-дизайн + AI интеграции">Премиум-дизайн + AI интеграции</div>
+            <div class="opt-desc" data-en="Unique visual, animations, AI workflow" data-ru="Уникальный визуальный стиль, анимации, нейросети">Уникальный визуальный стиль, анимации, нейросети</div>
+        </div>
+    </div>
+
+    <!-- Итоги и форма ввода -->
+    <div class="summary-box">
+        <div class="summary-row">
+            <span id="summary-service-label">Выбранное решение:</span>
+            <strong id="selectedServiceName">Telegram-бот или Mini App</strong>
+        </div>
+        <div class="summary-row total">
+            <span id="summary-total-label">Ориентировочная оценка:</span>
+            <span id="totalPrice">от 45 000 ₽</span>
+        </div>
+
         <div class="form-group">
             <label id="label-name">Ваше имя:</label>
-            <input type="text" id="clientName" placeholder="Например, Алексей">
+            <input type="text" id="clientName" placeholder="Например, Алексей" autocomplete="off">
         </div>
         <div class="form-group">
             <label id="label-contact">Телефон или Telegram для связи:</label>
-            <input type="text" id="clientContact" placeholder="+7 999 000-00-00 / @username">
+            <input type="text" id="clientContact" placeholder="+7 999 000-00-00 / @username" autocomplete="off">
         </div>
     </div>
 
-    <!-- Кнопка отправки -->
-    <button class="btn" id="submitBtn" onclick="submitOrder()">Выберите услугу выше</button>
+    <button class="btn" id="submitBtn" onclick="submitOrder()">🚀 Зафиксировать смету и забрать бонус</button>
 
     <div class="footer">
-        © 2026 • Powered by Telegram Mini App
+        🔥 В подарок: бесплатный аудит воронки продаж и ТЗ
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        let currentLang = 'ru'; // По умолчанию русский
-        let selectedServiceData = null;
+        let currentLang = 'ru';
+        
+        // Данные текущего расчета
+        let currentService = { nameRu: "Telegram-бот или Mini App", nameEn: "Telegram Bot / Mini App", baseRub: 45000, baseUsd: 500 };
+        let currentComplexity = { nameRu: "Стандарт / Быстрый запуск", nameEn: "Standard UI", addRub: 0, addUsd: 0 };
 
-        // Тексты интерфейса
         const uiText = {
             en: {
-                title: "🚀 IT Solutions & Bots",
-                formHeading: "📋 Enter your contact details:",
+                title: "🚀 IT Solutions Calculator",
+                step1: "1. What do you need to build?",
+                step2: "2. Complexity & Design Level",
+                summaryService: "Selected solution:",
+                summaryTotal: "Estimated investment:",
                 labelName: "Your Name:",
                 labelContact: "Phone or Telegram handle:",
                 placeholderName: "e.g., Alex",
                 placeholderContact: "+1 234 567-8900 / @username",
-                selectPrompt: "Please select a service above",
-                orderBtn: "Order: "
+                submitBtn: "🚀 Lock estimate & claim bonus"
             },
             ru: {
-                title: "🚀 ИТ-решения и Боты",
-                formHeading: "📋 Введите данные для связи:",
+                title: "🚀 Калькулятор IT-решений",
+                step1: "1. Что вам необходимо создать?",
+                step2: "2. Уровень реализации и дизайна",
+                summaryService: "Выбранное решение:",
+                summaryTotal: "Ориентировочная оценка:",
                 labelName: "Ваше имя:",
-                labelContact: "Телефон или Telegram:",
+                labelContact: "Телефон или Telegram для связи:",
                 placeholderName: "Например, Алексей",
                 placeholderContact: "+7 999 000-00-00 / @username",
-                selectPrompt: "Выберите услугу выше",
-                orderBtn: "Заказать: "
+                submitBtn: "🚀 Зафиксировать смету и забрать бонус"
             }
         };
 
@@ -249,86 +284,97 @@
             currentLang = currentLang === 'en' ? 'ru' : 'en';
             document.getElementById('lang-label').innerText = currentLang.toUpperCase();
             
-            // Обновляем тексты
             document.getElementById('main-title').innerText = uiText[currentLang].title;
-            document.getElementById('form-heading').innerText = uiText[currentLang].formHeading;
+            document.getElementById('step-1-title').innerText = uiText[currentLang].step1;
+            document.getElementById('step-2-title').innerText = uiText[currentLang].step2;
+            document.getElementById('summary-service-label').innerText = uiText[currentLang].summaryService;
+            document.getElementById('summary-total-label').innerText = uiText[currentLang].summaryTotal;
             document.getElementById('label-name').innerText = uiText[currentLang].labelName;
             document.getElementById('label-contact').innerText = uiText[currentLang].labelContact;
             document.getElementById('clientName').placeholder = uiText[currentLang].placeholderName;
             document.getElementById('clientContact').placeholder = uiText[currentLang].placeholderContact;
+            document.getElementById('submitBtn').innerText = uiText[currentLang].submitBtn;
 
-            // Обновляем карточки услуг (название, описание, цены в долларах или рублях)
-            document.querySelectorAll('.service-card').forEach(card => {
-                const titleEl = card.querySelector('.service-title');
-                const priceEl = card.querySelector('.service-price');
-                const descEl = card.querySelector('.service-desc');
-
+            // Перевод карточек
+            document.querySelectorAll('.option-card').forEach(card => {
+                const titleEl = card.querySelector('.opt-title');
+                const descEl = card.querySelector('.opt-desc');
                 titleEl.innerText = titleEl.getAttribute(`data-${currentLang}`);
-                priceEl.innerText = priceEl.getAttribute(`data-${currentLang}`);
                 descEl.innerText = descEl.getAttribute(`data-${currentLang}`);
             });
 
-            if (selectedServiceData) {
-                const activePrice = currentLang === 'ru' ? selectedServiceData.priceRu : selectedServiceData.priceEn;
-                document.getElementById('submitBtn').innerText = uiText[currentLang].orderBtn + selectedServiceData.name[currentLang];
-            } else {
-                document.getElementById('submitBtn').innerText = uiText[currentLang].selectPrompt;
-            }
+            updateTotal();
         }
 
-        function selectService(cardElement, serviceNameEn, priceEn, priceRu) {
-            // Убираем класс выбора у всех
-            document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
-            // Добавляем текущей
-            cardElement.classList.add('selected');
+        function selectService(element, nameEn, baseRub, baseUsd) {
+            // Убираем выделение у соседей в той же группе
+            element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
 
-            selectedServiceData = {
-                name: { en: serviceNameEn, ru: cardElement.querySelector('.service-title').getAttribute('data-ru') },
-                priceEn: priceEn,
-                priceRu: priceRu
+            currentService = {
+                nameRu: element.querySelector('.opt-title').getAttribute('data-ru'),
+                nameEn: nameEn,
+                baseRub: baseRub,
+                baseUsd: baseUsd
             };
 
-            // Показываем форму ввода
-            document.getElementById('orderForm').classList.add('active');
+            document.getElementById('selectedServiceName').innerText = currentLang === 'ru' ? currentService.nameRu : currentService.nameEn;
+            updateTotal();
+        }
 
-            // Обновляем кнопку
-            const activePrice = currentLang === 'ru' ? priceRu : priceEn;
-            document.getElementById('submitBtn').innerText = uiText[currentLang].orderBtn + selectedServiceData.name[currentLang] + ` (${activePrice})`;
+        function selectComplexity(element, nameEn, addRub, addUsd) {
+            element.parentElement.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+
+            currentComplexity = {
+                nameRu: element.querySelector('.opt-title').getAttribute('data-ru'),
+                nameEn: nameEn,
+                addRub: addRub,
+                addUsd: addUsd
+            };
+
+            updateTotal();
+        }
+
+        function updateTotal() {
+            const totalRub = currentService.baseRub + currentComplexity.addRub;
+            const totalUsd = currentService.baseUsd + currentComplexity.addUsd;
+
+            if (currentLang === 'ru') {
+                document.getElementById('totalPrice').innerText = `от ${totalRub.toLocaleString()} ₽`;
+            } else {
+                document.getElementById('totalPrice').innerText = `from $${totalUsd}`;
+            }
         }
 
         function submitOrder() {
-            if (!selectedServiceData) {
-                alert(currentLang === 'ru' ? "Пожалуйста, выберите услугу!" : "Please select a service first!");
-                return;
-            }
-
             const name = document.getElementById('clientName').value.trim();
             const contact = document.getElementById('clientContact').value.trim();
 
             if (!name || !contact) {
-                alert(currentLang === 'ru' ? "Пожалуйста, заполните имя и контакт для связи!" : "Please fill in your name and contact!");
+                alert(currentLang === 'ru' ? "Пожалуйста, укажите ваше имя и контакт для связи!" : "Please fill in your name and contact!");
                 return;
             }
 
-            const activePrice = currentLang === 'ru' ? selectedServiceData.priceRu : selectedServiceData.priceEn;
+            const totalRub = currentService.baseRub + currentComplexity.addRub;
+            const totalUsd = currentService.baseUsd + currentComplexity.addUsd;
+            const priceStr = currentLang === 'ru' ? `от ${totalRub.toLocaleString()} ₽` : `from $${totalUsd}`;
 
             const orderData = {
-                service: selectedServiceData.name[currentLang],
-                price: activePrice,
+                service: `${currentLang === 'ru' ? currentService.nameRu : currentService.nameEn} (${currentLang === 'ru' ? currentComplexity.nameRu : currentComplexity.nameEn})`,
+                price: priceStr,
                 lang: currentLang,
                 name: name,
                 contact: contact
             };
 
-            // Отправляем данные в Telegram бота
+            // Передаем данные боту в ЛС
             tg.sendData(JSON.stringify(orderData));
         }
 
-        // Устанавливаем начальный язык при загрузке (Русский по умолчанию)
         window.onload = function() {
-            // Если Telegram передает язык пользователя и он английский, можно переключить, но по дефолту оставим RU
             toggleLanguage();
-            toggleLanguage(); // Переключаем дважды, чтобы проинициализировать русские дата-атрибуты
+            toggleLanguage();
         };
     </script>
 </body>
